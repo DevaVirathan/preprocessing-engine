@@ -2,14 +2,14 @@ import logging
 
 import numpy as np
 
-from ingestion.raster_loader import load_raster
-from ingestion.metadata import extract_metadata
-from boundary.boundary_loader import load_boundary
-from boundary.reproject import reproject_boundary
-from preprocessing.subset import clip_raster
-from correction.atmospheric import dark_object_subtraction
-from analytics.ndvi import calculate_ndvi
-from output.saver import save_raster, save_ndvi_preview, save_json_report
+from app.ingestion.raster_loader import load_raster
+from app.ingestion.metadata import extract_metadata
+from app.boundary.boundary_loader import load_boundary
+from app.boundary.reproject import reproject_boundary
+from app.preprocessing.subset import clip_raster
+from app.correction.atmospheric import dark_object_subtraction
+from app.analytics.ndvi import calculate_ndvi
+from app.output.saver import save_raster, save_ndvi_preview, save_json_report
 
 logging.basicConfig(
     level=logging.INFO,
@@ -38,7 +38,7 @@ class PreprocessingPipeline:
         return load_boundary(boundary_path)
 
     def _validate(self, raster):
-        from validation.validator import validate_raster
+        from app.validation.validator import validate_raster
         logger.info("Validating raster...")
         validate_raster(raster)
         logger.info("Validation OK")
@@ -62,8 +62,8 @@ class PreprocessingPipeline:
         if data.shape[0] <= scl_band_idx:
             logger.info("No SCL band available, skipping cloud mask")
             return data, None
-        from cloud.detector import detect_clouds_from_scl
-        from cloud.masker import apply_cloud_mask, compute_cloud_stats
+        from app.cloud.detector import detect_clouds_from_scl
+        from app.cloud.masker import apply_cloud_mask, compute_cloud_stats
         scl = data[scl_band_idx]
         mask = detect_clouds_from_scl(scl)
         stats = compute_cloud_stats(mask)
