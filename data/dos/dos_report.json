@@ -1,0 +1,18 @@
+{
+    "method": "Dark Object Subtraction (DOS)",
+    "percentile": 1,
+    "red_dark_pixel": 200.0,
+    "nir_dark_pixel": 100.0,
+    "before": {
+        "red_mean": 1007.37,
+        "nir_mean": 2949.16,
+        "ndvi_mean": 0.4738
+    },
+    "after": {
+        "red_mean": 807.41,
+        "nir_mean": 2849.16,
+        "ndvi_mean": 0.5634
+    },
+    "ndvi_change": 0.0895,
+    "status": "success"
+}

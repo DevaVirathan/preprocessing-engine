@@ -1,0 +1,18 @@
+{
+    "input_tiles": 3,
+    "tile_files": [
+        "data/tiles/tile_left.tif",
+        "data/tiles/tile_center.tif",
+        "data/tiles/tile_right.tif"
+    ],
+    "output_file": "data/mosaic/merged.tif",
+    "validated": true,
+    "crs": "EPSG:32631",
+    "bands": 5,
+    "tile_compatibility": {
+        "same_crs": true,
+        "same_bands": true,
+        "same_resolution": true
+    },
+    "status": "success"
+}
