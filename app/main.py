@@ -7,15 +7,28 @@ from visualization.raster_visualizer import (
     load_band,
     save_band_preview,
     build_rgb,
+    build_rgb_from_array,
     save_rgb_preview,
     calculate_band_stats,
     generate_report,
+)
+from boundary.boundary_loader import load_boundary
+from boundary.reproject import reproject_boundary
+from preprocessing.subset import (
+    clip_raster,
+    save_clipped_raster,
+    build_processing_report,
+    save_processing_report,
 )
 
 RASTER_PATH = "data/raw/image.tif"
 METADATA_PATH = "data/metadata/metadata.json"
 PREVIEW_DIR = "data/preview"
 REPORT_PATH = "data/reports/image_report.txt"
+BOUNDARY_PATH = "data/boundaries/field.geojson"
+CLIPPED_PATH = "data/clipped/field.tif"
+CLIPPED_PREVIEW_PATH = f"{PREVIEW_DIR}/field_preview.png"
+PROCESSING_REPORT_PATH = "data/clipped/processing_report.json"
 
 raster = load_raster(RASTER_PATH)
 
@@ -68,5 +81,48 @@ for i in range(1, raster.count + 1):
 generate_report(metadata, stats, REPORT_PATH)
 print(f"Report saved to {REPORT_PATH}")
 
+# --- Phase 3: Boundary Loading ---
+print("\n=== Phase 3: Field Boundary Processing ===")
+boundary = load_boundary(BOUNDARY_PATH)
+print("Boundary loaded:")
+print(boundary)
+print(f"Boundary CRS: {boundary.crs}")
+print(f"Boundary valid: {boundary.is_valid.all()}")
+print(f"Boundary empty: {boundary.empty}")
+print(f"Boundary bounds: {boundary.total_bounds}")
+
+# --- Phase 3: CRS Reprojection ---
+if str(boundary.crs) != str(raster.crs):
+    print(f"CRS mismatch detected: boundary={boundary.crs}, raster={raster.crs}")
+    print("Reprojecting boundary to raster CRS...")
+    boundary = reproject_boundary(boundary, raster.crs)
+    print(f"Boundary CRS after reprojection: {boundary.crs}")
+else:
+    print("CRS match: no reprojection needed.")
+
+# --- Phase 3: Clip ---
+print("Clipping raster to boundary...")
+geometry = [feature for feature in boundary.geometry]
+clipped, transform = clip_raster(raster, geometry)
+print(f"Clipped shape: {clipped.shape}")
+
+# --- Phase 3: Save Clipped ---
+save_clipped_raster(clipped, transform, raster.meta, CLIPPED_PATH, raster.crs)
+print(f"Clipped raster saved to {CLIPPED_PATH}")
+
+# --- Phase 3: Clipped Preview ---
+clipped_rgb = build_rgb_from_array(clipped)
+if clipped_rgb is not None:
+    save_rgb_preview(clipped_rgb, CLIPPED_PREVIEW_PATH, title="Clipped Field")
+    print(f"Clipped preview saved to {CLIPPED_PREVIEW_PATH}")
+
+# --- Phase 3: Processing Report ---
+_, h, w = clipped.shape
+report = build_processing_report(
+    1, metadata, (h, w), raster.crs
+)
+save_processing_report(report, PROCESSING_REPORT_PATH)
+pprint(report)
+
 raster.close()
-print("\nPhase 2 complete.")
+print("\nPhase 3 complete.")

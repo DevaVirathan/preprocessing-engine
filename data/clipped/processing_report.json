@@ -1,0 +1,10 @@
+{
+    "field_id": 1,
+    "original_width": 1001,
+    "original_height": 1001,
+    "original_bands": 3,
+    "clipped_width": 36,
+    "clipped_height": 46,
+    "crs": "EPSG:32631",
+    "status": "success"
+}

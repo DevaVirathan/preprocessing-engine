@@ -1,3 +1,5 @@
 rasterio
 numpy
 matplotlib
+geopandas
+shapely

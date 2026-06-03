@@ -30,6 +30,15 @@ def build_rgb(raster, red_band, green_band, blue_band):
     return np.dstack((red, green, blue))
 
 
+def build_rgb_from_array(array, red_idx=2, green_idx=1, blue_idx=0):
+    if array.shape[0] < 3:
+        return None
+    red = normalize(array[red_idx])
+    green = normalize(array[green_idx])
+    blue = normalize(array[blue_idx])
+    return np.dstack((red, green, blue))
+
+
 def save_rgb_preview(rgb, output_path, title=None):
     plt.imshow(rgb)
     if title:
