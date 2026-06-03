@@ -1,0 +1,30 @@
+Image Report
+========================================
+
+Width:  1001
+Height: 1001
+Bands:  3
+CRS:    EPSG:32631
+Resolution: (10.0, 10.0)
+Bounds: BoundingBox(left=590520.0, bottom=5780620.0, right=600530.0, top=5790630.0)
+
+Band Statistics
+----------------------------------------
+
+Band 1:
+  Min:   0.00
+  Max:   10964.00
+  Mean:  1009.32
+  Std:   311.31
+
+Band 2:
+  Min:   0.00
+  Max:   10349.00
+  Mean:  873.63
+  Std:   363.80
+
+Band 3:
+  Min:   0.00
+  Max:   11652.00
+  Mean:  731.51
+  Std:   494.47

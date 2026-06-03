@@ -1,0 +1,11 @@
+{
+    "width": 1001,
+    "height": 1001,
+    "bands": 3,
+    "crs": "EPSG:32631",
+    "resolution": [
+        10.0,
+        10.0
+    ],
+    "bounds": "BoundingBox(left=590520.0, bottom=5780620.0, right=600530.0, top=5790630.0)"
+}
