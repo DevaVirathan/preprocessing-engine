@@ -1,0 +1,26 @@
+{
+    "raster": "data/raw/multispectral.tif",
+    "boundary": "data/boundaries/field_multispectral.geojson",
+    "steps": [
+        "load",
+        "validate",
+        "load_boundary",
+        "reproject",
+        "clip",
+        "cloud_mask",
+        "dos_correction",
+        "ndvi"
+    ],
+    "status": "success",
+    "dos": {
+        "red_dark_pixel": 633.86,
+        "nir_dark_pixel": 2514.34
+    },
+    "output_dir": "data/output",
+    "ndvi_path": "data/output/ndvi.tif",
+    "clipped_size": {
+        "bands": 5,
+        "height": 57,
+        "width": 40
+    }
+}
