@@ -1,0 +1,328 @@
+Build a Preprocessing Engine POC that takes a satellite image and field boundary as input and produces a cleaned image ready for NDVI calculation.
+
+POC Goal
+Input:
+    Sentinel-2 GeoTIFF
+    Field Boundary GeoJSON
+
+Output:
+    Preprocessed GeoTIFF
+    Metadata Report
+
+Pipeline:
+    Load Raster
+        ↓
+    Validate
+        ↓
+    Atmospheric Correction (simple)
+        ↓
+    Cloud Mask
+        ↓
+    Reproject
+        ↓
+    Clip (Subset)
+        ↓
+    Export
+
+Think of it as:
+
+raw_image.tif
+       ↓
+Preprocessing Engine
+       ↓
+processed_image.tif
+Recommended Architecture
+preprocessing-engine/
+│
+├── app/
+│   ├── ingestion/
+│   │     └── raster_loader.py
+│   │
+│   ├── preprocessing/
+│   │     ├── atmospheric.py
+│   │     ├── cloud_mask.py
+│   │     ├── geometric.py
+│   │     ├── mosaic.py
+│   │     └── subset.py
+│   │
+│   ├── services/
+│   │     └── pipeline.py
+│   │
+│   ├── models/
+│   │     └── metadata.py
+│   │
+│   ├── config/
+│   │     └── settings.py
+│   │
+│   └── main.py
+│
+├── data/
+│   ├── raw/
+│   ├── processed/
+│   └── boundaries/
+│
+├── tests/
+│
+└── requirements.txt
+Technology Stack
+Core GIS
+rasterio
+geopandas
+shapely
+pyproj
+Scientific
+numpy
+scipy
+Visualization
+matplotlib
+Optional
+gdal
+
+GDAL is the industry standard.
+
+Rasterio is easier for a POC.
+
+Phase 1 — Raster Loader
+Objective
+
+Read a GeoTIFF.
+
+Example:
+
+import rasterio
+
+with rasterio.open("image.tif") as src:
+    print(src.count)
+    print(src.width)
+    print(src.height)
+    print(src.crs)
+
+Output:
+
+Bands: 13
+Width: 10980
+Height: 10980
+CRS: EPSG:32643
+Phase 2 — Metadata Extraction
+
+Extract:
+
+{
+    "bands": 13,
+    "width": 10980,
+    "height": 10980,
+    "crs": "EPSG:32643",
+    "resolution": 10
+}
+
+Store:
+
+metadata.json
+
+This helps understand the image.
+
+Phase 3 — Subsetting
+
+Most important first feature.
+
+Input:
+
+Satellite Tile
+Field Polygon
+
+Output:
+
+Field Only Image
+
+Using:
+
+rasterio.mask.mask()
+
+Workflow:
+
+GeoJSON
+      ↓
+Polygon
+      ↓
+Clip Raster
+      ↓
+field_clip.tif
+Phase 4 — Reprojection
+
+Problem:
+
+Raster → UTM
+Polygon → WGS84
+
+They don't match.
+
+Solution:
+
+GeoDataFrame.to_crs()
+
+Workflow:
+
+Field Boundary
+      ↓
+Convert CRS
+      ↓
+Match Raster CRS
+Phase 5 — Cloud Masking
+
+For Sentinel-2:
+
+Use:
+
+QA60 Band
+
+or
+
+SCL Band
+
+Cloud pixels:
+
+255
+
+Mask them:
+
+numpy.where()
+
+Output:
+
+Cloud-Free Raster
+Phase 6 — Simple Atmospheric Correction
+
+For learning purposes:
+
+Implement Dark Object Subtraction (DOS).
+
+Algorithm:
+
+Corrected Pixel
+
+=
+
+Pixel Value
+
+-
+
+Darkest Pixel
+
+Pseudo:
+
+corrected = band - np.percentile(band, 1)
+
+This is not production-grade but teaches the concept.
+
+Later:
+
+Sen2Cor
+6S
+Phase 7 — Mosaic Engine
+
+Input:
+
+tile1.tif
+tile2.tif
+tile3.tif
+
+Output:
+
+merged.tif
+
+Using:
+
+rasterio.merge.merge()
+
+Workflow:
+
+Tiles
+   ↓
+Merge
+   ↓
+One Raster
+Phase 8 — Pipeline Orchestrator
+
+Create:
+
+class PreprocessingPipeline:
+pipeline.run(
+    raster_path,
+    boundary_path
+)
+
+Internally:
+
+Load
+ ↓
+Validate
+ ↓
+Reproject
+ ↓
+Clip
+ ↓
+Cloud Mask
+ ↓
+Atmospheric Correction
+ ↓
+Save
+Phase 9 — REST API
+
+Using FastAPI
+
+POST /preprocess
+
+Request:
+
+{
+  "image":"sentinel.tif",
+  "boundary":"field.geojson"
+}
+
+Response:
+
+{
+  "status":"completed",
+  "output":"processed.tif"
+}
+Final POC Architecture
+                    FastAPI
+                       │
+                       ▼
+            Preprocessing Pipeline
+                       │
+ ┌─────────────────────┼─────────────────────┐
+ │                     │                     │
+ ▼                     ▼                     ▼
+Subset          Cloud Mask          DOS Correction
+ │                     │                     │
+ └─────────────────────┼─────────────────────┘
+                       ▼
+                Export GeoTIFF
+                       ▼
+                Processed Raster
+Stretch Goal (Very Valuable)
+
+After preprocessing:
+
+Implement NDVI.
+
+Input:
+
+Band 4 (RED)
+Band 8 (NIR)
+
+Compute:
+
+NDVI=
+NIR+RED
+NIR−RED
+	​
+
+
+Generate:
+
+ndvi.tif
+ndvi.png
+
+Then display it on a map.
