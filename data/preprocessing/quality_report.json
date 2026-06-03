@@ -1,0 +1,15 @@
+{
+    "cloud_pixels": 525,
+    "valid_pixels": 9475,
+    "cloud_percentage": 5.25,
+    "atmospheric_correction": "DOS",
+    "dark_values": {
+        "band_3": 200.0,
+        "band_4": 100.0
+    },
+    "corrections_applied": [
+        "cloud_masking",
+        "dos_atmospheric_correction"
+    ],
+    "status": "success"
+}
