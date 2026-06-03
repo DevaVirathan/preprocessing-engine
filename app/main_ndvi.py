@@ -14,14 +14,14 @@ Pipeline:
 import json
 from pprint import pprint
 
-from ingestion.raster_loader import load_raster
-from ingestion.metadata import extract_metadata
-from boundary.boundary_loader import load_boundary
-from boundary.reproject import reproject_boundary
-from preprocessing.subset import clip_raster
-from analytics.ndvi import calculate_ndvi, save_ndvi_raster, save_ndvi_preview
-from analytics.statistics import calculate_ndvi_stats
-from analytics.classification import health_summary, build_health_report
+from app.ingestion.raster_loader import load_raster
+from app.ingestion.metadata import extract_metadata
+from app.boundary.boundary_loader import load_boundary
+from app.boundary.reproject import reproject_boundary
+from app.preprocessing.subset import clip_raster
+from app.analytics.ndvi import calculate_ndvi, save_ndvi_raster, save_ndvi_preview
+from app.analytics.statistics import calculate_ndvi_stats
+from app.analytics.classification import health_summary, build_health_report
 
 RASTER_PATH = "data/raw/multispectral.tif"
 BOUNDARY_PATH = "data/boundaries/field_multispectral.geojson"

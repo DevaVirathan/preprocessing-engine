@@ -10,9 +10,9 @@ Pipeline:
 import json
 from pprint import pprint
 
-from mosaic.merger import create_mosaic
-from mosaic.validator import validate_tiles
-from visualization.raster_visualizer import build_rgb_from_array, save_rgb_preview
+from app.mosaic.merger import create_mosaic
+from app.mosaic.validator import validate_tiles
+from app.visualization.raster_visualizer import build_rgb_from_array, save_rgb_preview
 
 TILE_DIR = "data/tiles"
 OUT_DIR = "data/mosaic"

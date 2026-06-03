@@ -16,10 +16,10 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-from ingestion.raster_loader import load_raster
-from correction.atmospheric import dark_object_subtraction
-from analytics.ndvi import calculate_ndvi, save_ndvi_preview
-from visualization.raster_visualizer import save_rgb_preview, build_rgb
+from app.ingestion.raster_loader import load_raster
+from app.correction.atmospheric import dark_object_subtraction
+from app.analytics.ndvi import calculate_ndvi, save_ndvi_preview
+from app.visualization.raster_visualizer import save_rgb_preview, build_rgb
 
 RASTER_PATH = "data/raw/multispectral.tif"
 OUT_DIR = "data/dos"

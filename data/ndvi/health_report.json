@@ -1,10 +1,10 @@
 {
     "field_id": 1,
-    "mean_ndvi": 0.5078,
-    "max_ndvi": 0.7368,
+    "mean_ndvi": 0.4971,
+    "max_ndvi": 0.7436,
     "min_ndvi": 0.0,
-    "health_status": "Healthy",
-    "healthy_pct": 74.9,
-    "moderate_pct": 16.5,
+    "health_status": "Moderate",
+    "healthy_pct": 70.7,
+    "moderate_pct": 20.7,
     "poor_pct": 8.6
 }

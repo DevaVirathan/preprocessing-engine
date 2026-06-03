@@ -15,12 +15,12 @@ import json
 import numpy as np
 from pprint import pprint
 
-from ingestion.raster_loader import load_raster
-from cloud.detector import detect_clouds_from_scl
-from cloud.masker import apply_cloud_mask, compute_cloud_stats
-from correction.atmospheric import dos_correct_raster
-from quality.validator import validate_raster, quality_report
-from analytics.ndvi import calculate_ndvi, save_ndvi_raster, save_ndvi_preview
+from app.ingestion.raster_loader import load_raster
+from app.cloud.detector import detect_clouds_from_scl
+from app.cloud.masker import apply_cloud_mask, compute_cloud_stats
+from app.correction.atmospheric import dos_correct_raster
+from app.quality.validator import validate_raster, quality_report
+from app.analytics.ndvi import calculate_ndvi, save_ndvi_raster, save_ndvi_preview
 
 RASTER_PATH = "data/raw/multispectral.tif"
 SCL_BAND = 5
